@@ -1,0 +1,5 @@
+{
+  "name": "TourOps Connect",
+  "description": "A collaborative platform for Travel Operators and Sales Assistants to manage tour resources, track status, and communicate efficiently, enhanced with Gemini AI for data parsing and reporting.",
+  "requestFramePermissions": []
+}
