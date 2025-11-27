@@ -149,6 +149,8 @@ export const INITIAL_TOURS: Tour[] = [
             hasElevator: true,
             hasAC: false,
             hasParking: false,
+            isOpConfirmed: false,
+            isSalesConfirmed: false,
             comments: [],
             history: [],
             lastUpdated: Date.now()

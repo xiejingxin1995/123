@@ -8,20 +8,6 @@ export interface User {
   avatar: string;
 }
 
-export enum ResourceStatus {
-  SEARCHING = 'SEARCHING',
-  PROPOSED = 'PROPOSED', // Added for intermediate state
-  CONFIRMED = 'CONFIRMED',
-  ISSUE = 'ISSUE',
-}
-
-export enum ResourceType {
-  HOTEL = 'HOTEL',
-  RESTAURANT = 'RESTAURANT',
-}
-
-export type MealType = 'LUNCH' | 'DINNER';
-
 export interface Comment {
   id: string;
   userId: string;
@@ -31,15 +17,29 @@ export interface Comment {
   timestamp: number;
 }
 
-export interface HistoryEntry {
+export interface HistoryItem {
   id: string;
   userId: string;
   userName: string;
   field: string;
-  oldValue: string;
-  newValue: string;
+  oldValue: string | number | boolean | null;
+  newValue: string | number | boolean | null;
   timestamp: number;
 }
+
+export enum ResourceType {
+  HOTEL = 'HOTEL',
+  RESTAURANT = 'RESTAURANT',
+}
+
+export enum ResourceStatus {
+  SEARCHING = 'SEARCHING',   // Yellow
+  PROPOSED = 'PROPOSED',     // Blue
+  CONFIRMED = 'CONFIRMED',   // Green (Requires Double Confirmation)
+  ISSUE = 'ISSUE',           // Red
+}
+
+export type MealType = 'LUNCH' | 'DINNER';
 
 export interface Resource {
   id: string;
@@ -49,13 +49,9 @@ export interface Resource {
   name: string;
   address: string;
   status: ResourceStatus;
-  assignedTo: string; // User ID
-  dueDate?: string; // ISO Date string
+  assignedTo: string; // User ID of OP
+  dueDate?: string;
   
-  // Confirmation Flags
-  isOpConfirmed?: boolean;
-  isSalesConfirmed?: boolean;
-
   // Hotel Specifics
   priceTwin?: number;
   priceSingle?: number;
@@ -64,7 +60,7 @@ export interface Resource {
   hasElevator?: boolean;
   hasAC?: boolean;
   hasParking?: boolean;
-  cancellationDeadline?: string; // 免取时间
+  cancellationDeadline?: string; // ISO String
 
   // Restaurant Specifics
   mealType?: MealType;
@@ -72,24 +68,28 @@ export interface Resource {
   menuLink?: string;
   cuisineType?: string;
 
+  // Confirmation Workflow
+  isOpConfirmed: boolean;
+  isSalesConfirmed: boolean;
+
   comments: Comment[];
-  history: HistoryEntry[];
+  history: HistoryItem[];
   lastUpdated: number;
 }
 
 export interface Tour {
   id: string;
-  code: string; // e.g., "2025-11-01"
+  code: string; // e.g. #2025-11-01
   name: string;
   startDate: string;
-  duration: number; // Number of days
+  duration: number; // Days
   resources: Resource[];
 }
 
 export interface Notification {
   id: string;
-  resourceId: string;
   tourId: string;
+  resourceId: string;
   message: string;
   timestamp: number;
   read: boolean;
